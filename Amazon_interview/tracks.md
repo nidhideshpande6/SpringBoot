@@ -93,10 +93,11 @@ package com.music.track.controller;
 import com.music.track.dto.TrackRequest;
 import com.music.track.model.Track;
 import com.music.track.service.TrackService;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("music/platform/v1/tracks")
@@ -109,6 +110,11 @@ public class TrackController {
         this.trackService = trackService;
     }
 
+    /**
+     * Create a track
+     * @param trackRequest
+     * @return
+     */
     @PostMapping()
     public ResponseEntity<Track> createTrack(@RequestBody TrackRequest trackRequest) {
         try {
@@ -119,21 +125,42 @@ public class TrackController {
         }
     }
 
+    /**
+     * Get all tracks
+     * @return
+     */
     @GetMapping()
     public ResponseEntity<List<Track>> getAllTracks() {
-        return null;
+        List<Track> tracks = trackService.getAllTracks();
+        return ResponseEntity.ok(tracks);
     }
 
+    /**
+     * Delete a track
+     * @param trackId
+     * @return
+     */
     @DeleteMapping("/{trackId}")
     public ResponseEntity<Void> deleteTrack(@PathVariable Long trackId) {
-        return null;
+        try {
+            trackService.deleteTrack(trackId);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
+    /**
+     * Get Tracks sorted
+     * @return
+     */
     @GetMapping("/sorted")
     public ResponseEntity<List<Track>> getTracksSorted() {
-        return null;
+        List<Track> tracks = trackService.sortedTracks();
+        return ResponseEntity.ok(tracks);
     }
 }
+
 ```
 
 - **Endpoints**:
